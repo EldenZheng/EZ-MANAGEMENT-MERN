@@ -33,7 +33,12 @@ export default function Login(){
         }))
     }
     const handleClick = (e)=>{
-        navigate('/Register')
+        axios.post("http://localhost:3001/Dummydata",formData)
+        .then(result =>{
+            console.log(result)
+            navigate('/')
+        })
+        .catch(err=>console.log(err))
     }
 
     return(
@@ -44,7 +49,7 @@ export default function Login(){
             handleChange={handleChange}
             buttonText="Login"
             loggedIn={false}
-            redirectButtonText="Go to Register"
+            redirectButtonText="add new data"
             handleClick={handleClick}
         />
     )
