@@ -10,21 +10,6 @@ export default function Login(){
     })
     const navigate = useNavigate()
 
-    const Login = (e)=>{
-        e.preventDefault();
-        axios.post("http://localhost:3001/Login",formData)
-        .then(result =>{
-            if(result.data === "success"){
-                sessionStorage.setItem('userData',JSON.stringify(formData))
-                navigate('/Home')
-            }
-            else{
-                console.log(result)
-            }
-        })
-        .catch(err=>console.log(err))
-    }
-
     const handleChange = (e) => {
         const {name,value}=e.target;
         setFormData((prevData)=>({
@@ -32,11 +17,72 @@ export default function Login(){
             [name]:value,
         }))
     }
+
+    //ORIGINAL WAY TO LOGIN USING SESSIONSTORAGE
+    // const Login = (e)=>{
+    //     e.preventDefault();
+    //     axios.post("http://localhost:3001/Login",formData)
+    //     .then(result =>{
+    //         if(result.data === "success"){
+    //             localStorage.setItem('userData',JSON.stringify(formData))
+    //             navigate('/Home')
+    //         }
+    //         else{
+    //             console.log(result)
+    //         }
+    //     })
+    //     .catch(err=>console.log(err))
+    // }
+
+    const Login = (e) => {
+        e.preventDefault();
+        axios.post('http://localhost:3001/login', formData)
+            .then(result => {
+                const { status, user, error } = result.data;
+
+                if (status === 'ok') {
+                    localStorage.setItem('token', user);
+                    alert('Login successful');
+                    navigate('/Home');
+                } else if (status === 'error') {
+                    alert(`Login failed: ${error}`);
+                } else {
+                    console.log(result);
+                }
+            })
+            .catch(err => console.log(err));
+    };
+
+    //LOGIN USING JWT EXAMPLE
+    // async function Login(event) {
+	// 	event.preventDefault()
+
+	// 	const response = await fetch('http://localhost:3001/Login', {
+	// 		method: 'POST',
+	// 		headers: {
+	// 			'Content-Type': 'application/json',
+	// 		},
+	// 		body: JSON.stringify({
+	// 			email,
+	// 			password,
+	// 		}),
+	// 	})
+
+	// 	const data = await response.json()
+
+	// 	if (data.user) {
+	// 		localStorage.setItem('token', data.user)
+	// 		alert('Login successful')
+	// 		navigate('/Home')
+	// 	} else {
+	// 		alert('Please check your username and password')
+	// 	}
+	// }
+
     const handleClick = (e)=>{
         axios.post("http://localhost:3001/Dummydata",formData)
         .then(result =>{
             console.log(result)
-            navigate('/')
         })
         .catch(err=>console.log(err))
     }
