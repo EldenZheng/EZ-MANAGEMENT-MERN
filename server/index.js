@@ -86,8 +86,8 @@ app.post('/login', async (req, res) => {
 	if (isPasswordValid) {
 		const token = jwt.sign(
 			{
-				name: user.name,
-				email: user.email,
+				name: user.employeeName,
+				email: user.employeeEmail,
 			},
 			'secret123'
 		)
@@ -104,9 +104,9 @@ app.get('/fetchData', async (req, res) => {
 	try {
 		const decoded = jwt.verify(token, 'secret123')
 		const email = decoded.email
-		const user = await User.findOne({ email: email })
+		const user = await EmployeeModel.findOne({ employeeEmail: email })
 
-		return res.json({ status: 'ok', userData: user })
+		return res.json({ status: 'ok', userdata: user })
 	} catch (error) {
 		console.log(error)
 		res.json({ status: 'error', error: 'invalid token' })
