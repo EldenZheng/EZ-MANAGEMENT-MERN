@@ -88,6 +88,15 @@ app.post('/login', async (req, res) => {
 			{
 				name: user.employeeName,
 				email: user.employeeEmail,
+				ic: user.employeeIC,
+				dept: user.employeeDept,
+				role: user.employeeRole,
+				phone: user.employeePhonenum,
+				address: user.employeeAddress,
+				hiredDate: user.employeeHireddate,
+				rating: user.employeeTotalrating,
+				team: user.employeeTeam,
+				picture: user.employeePicture,
 			},
 			'secret123'
 		)
@@ -103,10 +112,11 @@ app.get('/fetchData', async (req, res) => {
 
 	try {
 		const decoded = jwt.verify(token, 'secret123')
-		const email = decoded.email
-		const user = await EmployeeModel.findOne({ employeeEmail: email })
 
-		return res.json({ status: 'ok', userdata: user })
+		// const email = decoded.email
+		// const user = await EmployeeModel.findOne({ employeeEmail: email })
+
+		return res.json({ status: 'ok', userdata: decoded })
 	} catch (error) {
 		console.log(error)
 		res.json({ status: 'error', error: 'invalid token' })

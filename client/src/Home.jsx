@@ -2,7 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function Home(){
-    const [userData,setUserData]=useState();
+    const [userData,setUserData]=useState({
+		name: '',
+		email: '',
+		ic: '',
+		dept: '',
+		role: '',
+		phone: '',
+		address: '',
+		hiredDate: '',
+		rating: '',
+		team: ''
+	});
 
     const navigate = useNavigate()
 
@@ -12,14 +23,24 @@ export default function Home(){
 				'x-access-token': localStorage.getItem('token'),
 			},
 		})
-		console.log('Fetch Response:', req);
 
 		const data = await req.json()
 		if (data.status === 'ok') {
-			setUserData(data.userdata)
-		} else {
-			alert(data.error)
-		}
+			const user = data.userdata;
+		
+			const formattedHiredDate = new Date(user.hiredDate).toLocaleDateString('en-US', {
+			  year: 'numeric',
+			  month: 'long',
+			  day: 'numeric',
+			});
+		
+			setUserData({
+			  ...user,
+			  hiredDate: formattedHiredDate,
+			});
+		  } else {
+			alert(data.error);
+		  }
 	}
 
     useEffect(() => {
@@ -35,7 +56,16 @@ export default function Home(){
     return(
         <div>
             <h1>hello world</h1>
-            <h3>{userData.employeeName}</h3>
+            <h3>{userData.name}</h3>
+			<h3>{userData.email}</h3>
+			<h3>{userData.ic}</h3>
+			<h3>{userData.dept}</h3>
+			<h3>{userData.role}</h3>
+			<h3>{userData.phone}</h3>
+			<h3>{userData.address}</h3>
+			<h3>{userData.hiredDate}</h3>
+			<h3>{userData.rating}</h3>
+			<h3>{userData.team}</h3>
         </div>
     )
 }
