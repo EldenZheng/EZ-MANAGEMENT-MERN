@@ -5,6 +5,7 @@ import Home from './Home'
 // import UpdateUser from './UpdateUser'
 // import Register from './Register'
 import Login from './Login'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
 

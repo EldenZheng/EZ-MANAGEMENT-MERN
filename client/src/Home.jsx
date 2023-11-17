@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Button from 'react-bootstrap/Button';
+import EmployeeModal from './EmployeeInformation.jsx'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
+
 
 export default function Home(){
+	const [modalShow, setModalShow] = useState(false);
     const [userData,setUserData]=useState({
 		name: '',
 		email: '',
@@ -12,7 +18,8 @@ export default function Home(){
 		address: '',
 		hiredDate: '',
 		rating: '',
-		team: ''
+		team: '',
+		picture: ''
 	});
 
     const navigate = useNavigate()
@@ -47,6 +54,7 @@ export default function Home(){
 		const token = localStorage.getItem('token')
 		if (!token) {
 			localStorage.removeItem('token')
+			alert("You have been signed out, Please Login to gain access to our services!");
 			navigate('/');
 		}else {
 			fetchUserData()
@@ -55,17 +63,17 @@ export default function Home(){
 
     return(
         <div>
-            <h1>hello world</h1>
-            <h3>{userData.name}</h3>
-			<h3>{userData.email}</h3>
-			<h3>{userData.ic}</h3>
-			<h3>{userData.dept}</h3>
-			<h3>{userData.role}</h3>
-			<h3>{userData.phone}</h3>
-			<h3>{userData.address}</h3>
-			<h3>{userData.hiredDate}</h3>
-			<h3>{userData.rating}</h3>
-			<h3>{userData.team}</h3>
+            <h1>Welcome! {userData.name}</h1>
+			<Button variant="primary" onClick={() => setModalShow(true)}>
+				<FontAwesomeIcon icon={faCircleInfo} /> View Details
+			</Button>
+
+			<EmployeeModal
+				show={modalShow}
+				onHide={() => setModalShow(false)}
+				userdata={userData}
+			/>
+            
         </div>
     )
 }

@@ -40,3 +40,26 @@
 .read-the-docs {
   color: #888;
 }
+
+.employeeDetContainer{
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.imageContainer {
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circleImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+

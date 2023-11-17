@@ -45,7 +45,7 @@ export default function form (props){
                     )}
                     {!(props.loggedIn) &&(
                         <div>
-                            <label htmlFor="">Age</label>
+                            <label htmlFor="">Password</label>
                             <input
                                 type="password" 
                                 placeholder="Enter Password" 
