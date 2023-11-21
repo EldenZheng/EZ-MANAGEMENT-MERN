@@ -14,8 +14,8 @@
 }
 
 .imageContainer {
-  width: 260px;
-  height: 260px;
+  width: 300px;
+  height: 300px;
   border-radius: 50%;
   overflow: hidden;
   display: flex;
@@ -42,7 +42,7 @@ td {
   margin-right: 30px;
 }
 
-.modal {
+/* .modal {
   width: 40%;
   padding: 20px;
   border: 1px solid #ccc;
@@ -66,8 +66,39 @@ td {
 
 .modal button:hover {
   background-color: #0056b3;
+} */
+
+.modalOverlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+}
+.modalStyle{
+  color: white;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #0D333E;
+  padding: 25px;
+  z-index: 1000;
+  width: 50em;
+  border-radius: 30px;
+}
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-body.modal-open {
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+.modalHeader .headerInfo {
+  margin: 0;
+}
+
+.modalHeader .closeIcon {
+  cursor: pointer;
 }
