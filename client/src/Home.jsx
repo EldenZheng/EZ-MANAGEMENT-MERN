@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Button from 'react-bootstrap/Button';
+// import Button from 'react-bootstrap/Button';
 import EmployeeModal from './EmployeeInformation.jsx'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
 
 export default function Home(){
-	const [modalShow, setModalShow] = useState(false);
+	const [isOpen, setIsOpen] = useState(false);
     const [userData,setUserData]=useState({
 		name: '',
 		email: '',
@@ -23,6 +23,14 @@ export default function Home(){
 	});
 
     const navigate = useNavigate()
+
+	const openModal = () => {
+		setIsOpen(true);
+	  };
+	
+	  const closeModal = () => {
+		setIsOpen(false);
+	  };
 
     async function fetchUserData() {
 		const req = await fetch('http://localhost:3001/fetchData', {
@@ -64,13 +72,13 @@ export default function Home(){
     return(
         <div>
             <h1>Welcome! {userData.name}</h1>
-			<Button variant="primary" onClick={() => setModalShow(true)}>
+			<button onClick={openModal}>
 				<FontAwesomeIcon icon={faCircleInfo} /> View Details
-			</Button>
+			</button>
 
 			<EmployeeModal
-				show={modalShow}
-				onHide={() => setModalShow(false)}
+				isOpen={isOpen}
+				closeModal={closeModal}
 				userdata={userData}
 			/>
             
