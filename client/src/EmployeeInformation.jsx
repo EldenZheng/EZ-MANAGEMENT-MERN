@@ -3,6 +3,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope , faUser , faAddressCard , faBriefcase , faPhone , faLocationDot , faCalendar , faStar , faUsers } from '@fortawesome/free-solid-svg-icons'
 
 export default function EmployeeModal(props) {
+    React.useEffect(() => {
+        if (props.isOpen) {
+          document.body.classList.add('modal-open');
+        } else {
+          document.body.classList.remove('modal-open');
+        }
+    
+        return () => {
+          document.body.classList.remove('modal-open');
+        };
+      }, [props.isOpen]);
     return(
         <div>
             {props.isOpen && (
