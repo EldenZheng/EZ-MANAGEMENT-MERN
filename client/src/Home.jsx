@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 // import Button from 'react-bootstrap/Button';
-import EmployeeModal from './EmployeeInformation.jsx'
+import Modal from './Modal.jsx'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
+import { faCircleInfo, faEnvelope , faUser , faAddressCard , faBriefcase , faPhone , faLocationDot , faCalendar , faStar , faUsers } from '@fortawesome/free-solid-svg-icons'
 
 
 export default function Home(){
@@ -76,12 +76,60 @@ export default function Home(){
 				<FontAwesomeIcon icon={faCircleInfo} /> View Details
 			</button>
 
-			<EmployeeModal
+			<Modal
 				isOpen={isOpen}
 				closeModal={closeModal}
-				userdata={userData}
-			/>
-            
+				headerIcon={faUser}
+				headerText=" Employee Information"
+			>
+				<div className='employeeDetContainer'>
+                    <div className='imageContainer'>
+                            <img className='circleImage'
+                                src={userData.picture || 'profile-picture/default-profile-picture.png'}
+                                alt="Profile"
+                            />
+                    </div>
+                    <div>
+                        <table>
+                            <tr style={{borderBottom: '1px solid gray'}}>
+                                <td><h1>{userData.name}</h1></td>
+                            </tr>
+                            <tr style={{marginTop:'10px'}}>
+                                <td><FontAwesomeIcon icon={faEnvelope} /></td>
+                                <td><label>{userData.email}</label></td>
+                            </tr>
+                            <tr>
+                                <td><FontAwesomeIcon icon={faAddressCard} /></td>
+                                <td><label>{userData.ic}</label></td>
+                            </tr>
+                            <tr>
+                                <td><FontAwesomeIcon icon={faBriefcase} /></td>
+                                <td><label>{userData.dept} - {userData.role}</label></td>
+                            </tr>
+                            <tr>
+                                <td><FontAwesomeIcon icon={faPhone} /></td>
+                                <td><label>{userData.phone}</label></td>
+                            </tr>
+                            <tr>
+                                <td><FontAwesomeIcon icon={faLocationDot} /></td>
+                                <td><label>{userData.address}</label></td>
+                            </tr>
+                            <tr>
+                                <td><FontAwesomeIcon icon={faCalendar} /></td>
+                                <td><label>{userData.hiredDate}</label></td>
+                            </tr>
+                            <tr>
+                                <td><FontAwesomeIcon icon={faStar} /></td>
+                                <td><label>{userData.rating}</label></td>
+                            </tr>
+                            <tr>
+                                <td><FontAwesomeIcon icon={faUsers} /></td>
+                                <td><label>Team {userData.team}</label></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+			</Modal>
         </div>
     )
 }
