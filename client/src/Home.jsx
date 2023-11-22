@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom'
 // import Button from 'react-bootstrap/Button';
 import Modal from './Modal.jsx'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleInfo, faEnvelope , faUser , faAddressCard , faBriefcase , faPhone , faLocationDot , faCalendar , faStar , faUsers } from '@fortawesome/free-solid-svg-icons'
+import { faCircleInfo, faEnvelope , faUser , faAddressCard , faBriefcase , faPhone , faLocationDot , faCalendar , faStar , faUsers, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 
 
 export default function Home(){
-	const [isOpen, setIsOpen] = useState(false);
+	const [isOpenInfo, setIsOpenInfo] = useState(false);
+	const [isOpenUpdate, setIsOpenUpdate] = useState(false);
+	const [profilePicture, setProfilePicture] = useState(null);
     const [userData,setUserData]=useState({
 		name: '',
 		email: '',
@@ -24,13 +26,42 @@ export default function Home(){
 
     const navigate = useNavigate()
 
-	const openModal = () => {
-		setIsOpen(true);
-	  };
+	const openModalInfo = () => {
+		setIsOpenInfo(true);
+	};
 	
-	  const closeModal = () => {
-		setIsOpen(false);
-	  };
+	const closeModalInfo = () => {
+		setIsOpenInfo(false);
+	};
+
+	const openModalUp = () => {
+		setIsOpenUpdate(true);
+	};
+	
+	const closeModalUp = () => {
+		setIsOpenUpdate(false);
+	};
+
+	const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+    };
+
+	const handleUpload = async () => {
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('profilePicture', file);
+
+        try {
+            await axios.post('http://localhost:3001/upload-profile-picture/'+userData.email, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        });
+            setProfilePicture(URL.createObjectURL(file));
+            alert('Profile picture uploaded successfully');
+        } catch (error) {
+            alert('Profile picture upload failed');
+        }
+    };
 
     async function fetchUserData() {
 		const req = await fetch('http://localhost:3001/fetchData', {
@@ -58,6 +89,24 @@ export default function Home(){
 		  }
 	}
 
+	const Update = (e)=>{
+        e.preventDefault()
+        axios.put("http://localhost:3001/updateUser/"+id,userData)
+        .then(result =>{
+            console.log(result)
+            navigate('/Home')
+        })
+        .catch(err=>console.log(err))
+    }
+
+    const handleChange = (e) => {
+        const {name,value}=e.target;
+        setFormData((prevData)=>({
+            ...prevData,
+            [name]:value,
+        }))
+    }
+
     useEffect(() => {
 		const token = localStorage.getItem('token')
 		if (!token) {
@@ -71,30 +120,49 @@ export default function Home(){
 
     return(
         <div>
-            <h1>Welcome! {userData.name}</h1>
-			<button onClick={openModal}>
+			<table>
+				<tr>
+					<td style={{borderRight:'2px solid black'}}>
+						<div className='imageContainerSmall'>
+						<img
+							className='circleImageSmall'
+							src={userData.picture || 'profile-picture/default-profile-picture.png'}
+							alt="Profile"
+						/>
+						</div>
+					</td>
+					<td>
+						<div className="textContainer">
+						<h1>{userData.name}</h1>
+						<label>{userData.dept} - {userData.role}</label><br/>
+						<label>Team {userData.team}</label>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<button onClick={openModalInfo}>
 				<FontAwesomeIcon icon={faCircleInfo} /> View Details
 			</button>
 
 			<Modal
-				isOpen={isOpen}
-				closeModal={closeModal}
+				isOpen={isOpenInfo}
+				closeModal={closeModalInfo}
 				headerIcon={faUser}
 				headerText=" Employee Information"
 			>
-				<div className='employeeDetContainer'>
+				<div className='employeeDetContainer' style={{width:'50em'}}>
                     <div className='imageContainer'>
-                            <img className='circleImage'
-                                src={userData.picture || 'profile-picture/default-profile-picture.png'}
-                                alt="Profile"
-                            />
+						<img className='circleImage'
+							src={userData.picture || 'profile-picture/default-profile-picture.png'}
+							alt="Profile"
+						/>
                     </div>
                     <div>
                         <table>
-                            <tr style={{borderBottom: '1px solid gray'}}>
+                            <tr className='nameDet'>
                                 <td><h1>{userData.name}</h1></td>
                             </tr>
-                            <tr style={{marginTop:'10px'}}>
+                            <tr className='otherDet'>
                                 <td><FontAwesomeIcon icon={faEnvelope} /></td>
                                 <td><label>{userData.email}</label></td>
                             </tr>
@@ -129,6 +197,124 @@ export default function Home(){
                         </table>
                     </div>
                 </div>
+			</Modal>
+			<button onClick={openModalUp}>
+				<FontAwesomeIcon icon={faPenToSquare} /> Update Details
+			</button>
+			<Modal
+				isOpen={isOpenUpdate}
+				closeModal={closeModalUp}
+				headerIcon={faPenToSquare}
+				headerText=" Edit Information"
+			>
+				<div className='employeeDetContainer'>
+                    <div className='imageContainer'>
+						<img className='circleImage'
+							src={userData.picture || 'profile-picture/default-profile-picture.png'}
+							alt="Profile"
+						/>
+                    </div>
+					
+                    <div>
+						
+                        <form>
+                            <div>
+								<FontAwesomeIcon icon={faUser} />
+								<label htmlFor="">Name</label><br/>
+								<input
+									type="text"
+									placeholder="Enter Name" 
+									name="name"
+									value={userData.name}
+									onChange={handleChange}
+								/>
+                            </div>
+							<div>
+								<FontAwesomeIcon icon={faEnvelope} />
+								<label htmlFor="">Email</label><br/>
+								<input
+									type="text"
+									placeholder="Enter Email" 
+									name="email"
+									value={userData.email}
+									onChange={handleChange}
+								/>
+                            </div>
+							<div>
+								<FontAwesomeIcon icon={faAddressCard} />
+								<label htmlFor="">IC</label><br/>
+								<input
+									type="text"
+									placeholder="Enter IC" 
+									name="ic"
+									value={userData.ic}
+									onChange={handleChange}
+								/>
+                            </div>
+							<div>
+								<FontAwesomeIcon icon={faBriefcase} />
+								<label htmlFor="">Deptartment</label><br/>
+								<input
+									type="text"
+									placeholder="Enter Department" 
+									name="dept"
+									value={userData.dept}
+									onChange={handleChange}
+								/>
+                            </div>
+							<div>
+								<FontAwesomeIcon icon={faBriefcase} />
+								<label htmlFor="">Role</label><br/>
+								<input
+									type="text"
+									placeholder="Enter Role" 
+									name="role"
+									value={userData.role}
+									onChange={handleChange}
+								/>
+                            </div>
+							<div>
+								<FontAwesomeIcon icon={faPhone} />
+								<label htmlFor="">Phone</label><br/>
+								<input
+									type="text"
+									placeholder="Enter Phone" 
+									name="phone"
+									value={userData.phone}
+									onChange={handleChange}
+								/>
+                            </div>
+							<div>
+								<FontAwesomeIcon icon={faLocationDot} />
+								<label htmlFor="">Address</label><br/>
+								<input
+									type="text"
+									placeholder="Enter Address" 
+									name="address"
+									value={userData.address}
+									onChange={handleChange}
+								/>
+                            </div>
+							<div>
+								<FontAwesomeIcon icon={faUsers} />
+								<label htmlFor="">Team</label><br/>
+								<input
+									type="text"
+									placeholder="Enter Team" 
+									name="team"
+									value={userData.team}
+									onChange={handleChange}
+								/>
+                            </div>
+							<button>Save Details</button>
+                        </form>
+                    </div>
+
+                </div>
+				<input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
+				<button onClick={handleUpload}>
+					<FontAwesomeIcon icon={faPenToSquare} />Change Profile Picture
+				</button>
 			</Modal>
         </div>
     )
