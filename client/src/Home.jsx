@@ -312,6 +312,7 @@ export default function Home(){
 
                 </div>
 				<input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
+				<br />
 				<button onClick={handleUpload}>
 					<FontAwesomeIcon icon={faPenToSquare} />Change Profile Picture
 				</button>
