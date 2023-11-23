@@ -9,7 +9,6 @@ const fs = require('fs');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const upload = multer();
 
 const EmployeeModel = require('./models/Employees.js')
 const LayoffModel = require('./models/Layoff.js')
@@ -87,6 +86,7 @@ app.post('/login', async (req, res) => {
 	if (isPasswordValid) {
 		const token = jwt.sign(
 			{
+				id: user._id,
 				name: user.employeeName,
 				email: user.employeeEmail,
 				ic: user.employeeIC,
@@ -97,7 +97,7 @@ app.post('/login', async (req, res) => {
 				hiredDate: user.employeeHireddate,
 				rating: user.employeeTotalrating,
 				team: user.employeeTeam,
-				picture: user.employeePicture,
+				picture: user.profilePicture,
 			},
 			'secret123'
 		)
@@ -124,23 +124,35 @@ app.get('/fetchData', async (req, res) => {
 	}
 })
 
+const upload = multer();
+
 app.post('/upload-profile-picture/:id', upload.single('profilePicture'), (req, res) => {
     const userId = req.params.id;
     
     // Check if a file was uploaded
     if (req.file) {
-        // Convert the image file to a Base64 string
-        const profilePicture = req.file.buffer.toString('base64');
+		// Convert the image file to a Base64 string
+		const profilePicture = req.file.buffer.toString('base64');
 
-        // Update the user's profilePicture field in the database
-        EmployeeModel.findOneAndUpdate({email:userId}, { profilePicture: profilePicture })
-        .then(users=>res.json(users))
-        .catch(err=>res.json(err))
+		// Update the user's profilePicture field in the database
+		EmployeeModel.findOneAndUpdate({employeeEmail:userId}, { profilePicture: profilePicture })
+		.then(users=>res.json(users))
+		.catch(err=>res.json(err))
     } else {
         console.error('No file uploaded');
         res.status(400).json({ error: 'No file uploaded' });
     }
 });
+
+app.put("/updateUser/:id", (req, res) =>{
+    const id = req.params.id;
+    EmployeeModel.findByIdAndUpdate({_id:id} ,{
+        name:req.body.name, 
+        email:req.body.email, 
+        age: req.body.age})
+    .then(users=>res.json(users))
+    .catch(err=>res.json(err))
+})
 
 app.post("/Dummydata",async(req, res) =>{
     const sampleEmployee = {

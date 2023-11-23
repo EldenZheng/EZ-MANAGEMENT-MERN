@@ -12,6 +12,7 @@ export default function Home(){
 	const [isOpenUpdate, setIsOpenUpdate] = useState(false);
 	const [file, setFile] = useState(null);
     const [userData,setUserData]=useState({
+		id:'',
 		name: '',
 		email: '',
 		ic: '',
@@ -88,6 +89,7 @@ export default function Home(){
 			setUserData({
 			  ...user,
 			  hiredDate: formattedHiredDate,
+			  picture: "data:image/jpeg;base64," + user.picture,
 			});
 		  } else {
 			alert(data.error);
