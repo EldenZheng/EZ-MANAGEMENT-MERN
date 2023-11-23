@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 // import Button from 'react-bootstrap/Button';
+import axios from "axios";
 import Modal from './Modal.jsx'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleInfo, faEnvelope , faUser , faAddressCard , faBriefcase , faPhone , faLocationDot , faCalendar , faStar , faUsers, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
@@ -9,7 +10,7 @@ import { faCircleInfo, faEnvelope , faUser , faAddressCard , faBriefcase , faPho
 export default function Home(){
 	const [isOpenInfo, setIsOpenInfo] = useState(false);
 	const [isOpenUpdate, setIsOpenUpdate] = useState(false);
-	const [profilePicture, setProfilePicture] = useState(null);
+	const [file, setFile] = useState(null);
     const [userData,setUserData]=useState({
 		name: '',
 		email: '',
@@ -56,10 +57,14 @@ export default function Home(){
             await axios.post('http://localhost:3001/upload-profile-picture/'+userData.email, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         });
-            setProfilePicture(URL.createObjectURL(file));
+			setUserData((prevData)=>({
+				...prevData,
+				picture:URL.createObjectURL(file),
+        	}));
             alert('Profile picture uploaded successfully');
         } catch (error) {
             alert('Profile picture upload failed');
+			console.log(error)
         }
     };
 
@@ -101,7 +106,7 @@ export default function Home(){
 
     const handleChange = (e) => {
         const {name,value}=e.target;
-        setFormData((prevData)=>({
+        setUserData((prevData)=>({
             ...prevData,
             [name]:value,
         }))
