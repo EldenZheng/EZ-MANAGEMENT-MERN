@@ -87,17 +87,17 @@ app.post('/login', async (req, res) => {
 		const token = jwt.sign(
 			{
 				id: user._id,
-				name: user.employeeName,
-				email: user.employeeEmail,
-				ic: user.employeeIC,
-				dept: user.employeeDept,
-				role: user.employeeRole,
-				phone: user.employeePhonenum,
-				address: user.employeeAddress,
-				hiredDate: user.employeeHireddate,
-				rating: user.employeeTotalrating,
-				team: user.employeeTeam,
-				picture: user.profilePicture,
+				// name: user.employeeName,
+				// email: user.employeeEmail,
+				// ic: user.employeeIC,
+				// dept: user.employeeDept,
+				// role: user.employeeRole,
+				// phone: user.employeePhonenum,
+				// address: user.employeeAddress,
+				// hiredDate: user.employeeHireddate,
+				// rating: user.employeeTotalrating,
+				// team: user.employeeTeam,
+				// picture: user.profilePicture,
 			},
 			'secret123'
 		)
@@ -114,10 +114,10 @@ app.get('/fetchData', async (req, res) => {
 	try {
 		const decoded = jwt.verify(token, 'secret123')
 
-		// const email = decoded.email
-		// const user = await EmployeeModel.findOne({ employeeEmail: email })
+		const id = decoded.id
+		const user = await EmployeeModel.findById({ _id: id })
 
-		return res.json({ status: 'ok', userdata: decoded })
+		return res.json({ status: 'ok', userdata: user })
 	} catch (error) {
 		console.log(error)
 		res.json({ status: 'error', error: 'invalid token' })
@@ -154,7 +154,6 @@ app.put("/updateUser/:id", (req, res) =>{
 		employeeRole: req.body.role,
 		employeePhonenum: req.body.phone,
 		employeeAddress: req.body.address,
-		employeeHireddate: req.body.hiredDate,
 		employeeTeam: req.body.team})
     .then(users=>res.json(users))
     .catch(err=>res.json(err))

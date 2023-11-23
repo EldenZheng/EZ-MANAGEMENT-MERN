@@ -87,9 +87,18 @@ export default function Home(){
 			});
 		
 			setUserData({
-			  ...user,
-			  hiredDate: formattedHiredDate,
-			  picture: "data:image/jpeg;base64," + user.picture,
+				id:user._id,
+				name: user.employeeName,
+				email: user.employeeEmail,
+				ic: user.employeeIC,
+				dept: user.employeeDept,
+				role: user.employeeRole,
+				phone: user.employeePhonenum,
+				address: user.employeeAddress,
+				rating: user.employeeTotalrating,
+				team: user.employeeTeam,
+				hiredDate: formattedHiredDate,
+				picture: "data:image/jpeg;base64," + user.profilePicture,
 			});
 		  } else {
 			alert(data.error);
