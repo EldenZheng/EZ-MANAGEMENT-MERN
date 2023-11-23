@@ -147,9 +147,15 @@ app.post('/upload-profile-picture/:id', upload.single('profilePicture'), (req, r
 app.put("/updateUser/:id", (req, res) =>{
     const id = req.params.id;
     EmployeeModel.findByIdAndUpdate({_id:id} ,{
-        name:req.body.name, 
-        email:req.body.email, 
-        age: req.body.age})
+		employeeName: req.body.name,
+		employeeEmail: req.body.email,
+		employeeIC: req.body.ic,
+		employeeDept: req.body.dept,
+		employeeRole: req.body.role,
+		employeePhonenum: req.body.phone,
+		employeeAddress: req.body.address,
+		employeeHireddate: req.body.hiredDate,
+		employeeTeam: req.body.team})
     .then(users=>res.json(users))
     .catch(err=>res.json(err))
 })

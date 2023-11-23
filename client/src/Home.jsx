@@ -98,7 +98,7 @@ export default function Home(){
 
 	const Update = (e)=>{
         e.preventDefault()
-        axios.put("http://localhost:3001/updateUser/"+id,userData)
+        axios.put("http://localhost:3001/updateUser/"+userData.id,userData)
         .then(result =>{
             console.log(result)
             navigate('/Home')
@@ -224,7 +224,7 @@ export default function Home(){
 					
                     <div>
 						
-                        <form>
+                        <form onSubmit={Update}>
                             <div>
 								<FontAwesomeIcon icon={faUser} />
 								<label htmlFor="">Name</label><br/>
