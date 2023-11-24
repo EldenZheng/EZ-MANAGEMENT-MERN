@@ -34,6 +34,25 @@ app.use(express.json())
 
 mongoose.connect("mongodb://127.0.0.1:27017/EZ_Management")
 
+app.post("/createUser",async(req, res) =>{
+	const newPassword = await bcrypt.hash(req.body.password, 10)
+    EmployeeModel.create({
+		employeeName: req.body.name,
+        employeePassword: newPassword,
+        employeeIC: req.body.ic,
+        employeeDept: req.body.dept,
+        employeeRole: req.body.role,
+        employeeEmail: req.body.email,
+        employeePhonenum: req.body.phone,
+        employeeAddress: req.body.address,
+        employeeHireddate: new Date(),
+        employeeTotalrating: 0,
+        profilePicture: req.body.picture,
+        employeeTeam: req.body.team
+	})
+    .then(users=>res.json(users))
+    .catch(err=>res.json(err))
+})
 
 app.post("/register",async(req, res) =>{
     try {

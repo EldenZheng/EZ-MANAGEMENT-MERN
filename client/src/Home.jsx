@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from "axios";
 import Modal from './Modal.jsx'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleInfo, faEnvelope , faUser , faAddressCard , faBriefcase , faPhone , faLocationDot , faCalendar , faStar , faUsers, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { faCircleInfo, faEnvelope , faUser , faAddressCard , faBriefcase , faPhone , faLocationDot , faCalendar , faStar , faUsers, faPenToSquare, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 
 
 export default function Home(){
@@ -15,6 +15,7 @@ export default function Home(){
 		id:'',
 		name: '',
 		email: '',
+		// password: '',
 		ic: '',
 		dept: '',
 		role: '',
@@ -105,7 +106,7 @@ export default function Home(){
 		  }
 	}
 
-	const Update = (e)=>{
+	const UpdateData = (e)=>{
         e.preventDefault()
         axios.put("http://localhost:3001/updateUser/"+userData.id,userData)
         .then(result =>{
@@ -233,7 +234,7 @@ export default function Home(){
 					
                     <div>
 						
-                        <form onSubmit={Update}>
+                        <form onSubmit={UpdateData}>
                             <div>
 								<FontAwesomeIcon icon={faUser} />
 								<label htmlFor="">Name</label><br/>
@@ -242,6 +243,17 @@ export default function Home(){
 									placeholder="Enter Name" 
 									name="name"
 									value={userData.name}
+									onChange={handleChange}
+								/>
+                            </div>
+							<div>
+								<FontAwesomeIcon icon={faEnvelope} />
+								<label htmlFor="">Password</label><br/>
+								<input
+									type="text"
+									placeholder="Enter Password" 
+									name="password"
+									value={userData.password}
 									onChange={handleChange}
 								/>
                             </div>
@@ -333,6 +345,13 @@ export default function Home(){
 					<FontAwesomeIcon icon={faPenToSquare} />Change Profile Picture
 				</button>
 			</Modal>
+			<button onClick={()=>navigate('/AddUser')}>
+				<FontAwesomeIcon icon={faUserPlus} /> Edit Password
+			</button>
+
+			<button onClick={()=>navigate('/AddUser')}>
+				<FontAwesomeIcon icon={faUserPlus} /> Add User
+			</button>
         </div>
     )
 }
