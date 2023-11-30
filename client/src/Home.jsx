@@ -124,6 +124,11 @@ export default function Home(){
         }))
     }
 
+	const signOut = () =>{
+		localStorage.removeItem('token');
+		navigate('/')
+	}
+
     useEffect(() => {
 		const token = localStorage.getItem('token')
 		if (!token) {
@@ -353,7 +358,7 @@ export default function Home(){
 				<FontAwesomeIcon icon={faUserPlus} /> Add User
 			</button>
 
-			<button onClick={()=>navigate('/AddUser')}>
+			<button onClick={signOut}>
 				<FontAwesomeIcon icon={faUserPlus} /> Sign Out
 			</button>
         </div>
