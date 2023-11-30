@@ -79,14 +79,6 @@ export default function Login(){
 	// 	}
 	// }
 
-    const handleClick = (e)=>{
-        axios.post("http://localhost:3001/Dummydata",formData)
-        .then(result =>{
-            console.log(result)
-        })
-        .catch(err=>console.log(err))
-    }
-
     return(
         <FormTemplate
             formData={formData}
@@ -96,7 +88,6 @@ export default function Login(){
             buttonText="Login"
             loggedIn={false}
             redirectButtonText="add new data"
-            handleClick={handleClick}
         />
     )
 }

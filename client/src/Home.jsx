@@ -352,6 +352,10 @@ export default function Home(){
 			<button onClick={()=>navigate('/AddUser')}>
 				<FontAwesomeIcon icon={faUserPlus} /> Add User
 			</button>
+
+			<button onClick={()=>navigate('/AddUser')}>
+				<FontAwesomeIcon icon={faUserPlus} /> Sign Out
+			</button>
         </div>
     )
 }

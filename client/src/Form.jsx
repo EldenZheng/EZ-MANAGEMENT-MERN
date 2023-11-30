@@ -58,7 +58,6 @@ export default function form (props){
                     )}
                     <button>{props.buttonText}</button>
                 </form><br />
-                {!(props.loggedIn) && (<button onClick={props.handleClick}>{props.redirectButtonText}</button>)}
             </div>
         </div>
     )

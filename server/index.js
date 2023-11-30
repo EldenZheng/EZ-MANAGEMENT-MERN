@@ -54,20 +54,6 @@ app.post("/createUser",async(req, res) =>{
     .catch(err=>res.json(err))
 })
 
-app.post("/register",async(req, res) =>{
-    try {
-		const newPassword = await bcrypt.hash(req.body.password, 10)
-		await EmployeeModel.create({
-			name: req.body.name,
-			email: req.body.email,
-			password: newPassword,
-		})
-		res.json({ status: 'ok' })
-	} catch (err) {
-		res.json({ status: 'error', error: 'Duplicate email' })
-	}
-})
-
 // ORIGINAL WAY TO LOGIN USING SESSIONSTORAGE
 // app.post("/login",(req, res) =>{
 //     const {email,password} = req.body;
@@ -176,38 +162,6 @@ app.put("/updateUser/:id", (req, res) =>{
 		employeeTeam: req.body.team})
     .then(users=>res.json(users))
     .catch(err=>res.json(err))
-})
-
-app.post("/Dummydata",async(req, res) =>{
-    const sampleEmployee = {
-        employeeName: 'John Doe',
-        employeePassword: await bcrypt.hash('password123', 10),
-        employeeIC: '1234567890',
-        employeeDept: 'IT',
-        employeeRole: 1,
-        employeeEmail: 'john.doe@example.com',
-        employeePhonenum: '1234567890',
-        employeeAddress: '123 Main St, City',
-        employeeHireddate: new Date('2023-01-01'),
-        employeeTotalrating: 0,
-        profilePicture: '',
-        employeeTeam: 1
-    };
-    try {
-		const newEmployee = new EmployeeModel(sampleEmployee);
-
-        // Save the document to MongoDB
-        newEmployee.save()
-            .then(result => {
-                console.log('Employee saved to MongoDB:', result);
-            })
-            .catch(error => {
-                console.error('Error saving employee to MongoDB:', error);
-            });
-	} catch (err) {
-        console.log(err)
-		res.json({ status: 'error', error: 'Duplicate email' })
-	}
 })
 
 app.listen(3001, ()=>{
