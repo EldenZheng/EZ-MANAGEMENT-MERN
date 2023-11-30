@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
+import axios from "axios";
+import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope , faUser , faAddressCard , faBriefcase , faPhone , faLocationDot , faUsers, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope , faUser , faAddressCard , faBriefcase , faPhone , faLocationDot , faUsers, faKey } from '@fortawesome/free-solid-svg-icons'
 
 export default function AddUser(){
     const [file, setFile] = useState(null);
@@ -18,12 +20,14 @@ export default function AddUser(){
 		picture: ''
 	});
 
+    const navigate = useNavigate()
+
     const AddUser = (e)=>{
         e.preventDefault();
         axios.post("http://localhost:3001/createUser",userData)
         .then(result =>{
             handleUpload()
-            console.log(result)
+            alert('Employee Added Successfully!')
             navigate('/Home')
         })
         .catch(err=>console.log(err))
@@ -38,24 +42,46 @@ export default function AddUser(){
     }
 
     const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
-        setProfilePicture(URL.createObjectURL(file))
+        const selectedFile = e.target.files[0];
+    
+        setFile(selectedFile);
+    
+        if (selectedFile) {
+            // Use the selected file directly to create an object URL
+            setProfilePicture(URL.createObjectURL(selectedFile));
+        }
     };
+    
 
 	const handleUpload = async () => {
-        if (!file) return;
+        let fileToUpload = file;
 
+        if (!fileToUpload) {
+            // If file is empty, use default profile picture
+            fileToUpload = await fetchDefaultProfilePicture();
+        }
+    
         const formData = new FormData();
-        formData.append('profilePicture', file);
+        formData.append('profilePicture', fileToUpload);
 
         try {
             await axios.post('http://localhost:3001/upload-profile-picture/'+userData.email, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         });
-            alert('Profile picture uploaded successfully');
         } catch (error) {
             alert('Profile picture upload failed');
 			console.log(error)
+        }
+    };
+
+    const fetchDefaultProfilePicture = async () => {
+        try {
+            const response = await fetch('./profile-picture/default-profile-picture.png'); // Replace with the actual path
+            const blob = await response.blob();
+            return new File([blob], 'default-profile-picture.png');
+        } catch (error) {
+            console.log(error);
+            return null; // Return null or handle the default image fetch failure in your specific way
         }
     };
 	
@@ -65,7 +91,7 @@ export default function AddUser(){
             <div className='employeeDetContainer'>
                 <div className='imageContainer'>
                     <img className='circleImage'
-                        src={profilePicture || 'profile-picture/default-profile-picture.png'}
+                        src={ profilePicture || 'profile-picture/default-profile-picture.png'}
                         alt="Profile"
                     />
                 </div>
@@ -90,6 +116,17 @@ export default function AddUser(){
                                 placeholder="Enter Email" 
                                 name="email"
                                 value={userData.email}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div>
+                            <FontAwesomeIcon icon={faKey} />
+                            <label htmlFor="">Password</label><br/>
+                            <input
+                                type="text"
+                                placeholder="Enter Password" 
+                                name="password"
+                                value={userData.password}
                                 onChange={handleChange}
                             />
                         </div>
@@ -159,17 +196,16 @@ export default function AddUser(){
                                 onChange={handleChange}
                             />
                         </div>
-                        <button>Save Details</button>
+                        <button>Add User</button>
                     </form>
                 </div>
 
             </div>
             <input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
             <br />
-            <button onClick={handleUpload}>
+            {/* <button onClick={handleUpload}>
                 <FontAwesomeIcon icon={faPenToSquare} />Change Profile Picture
-            </button>
-
+            </button> */}
         </>
     )
 }

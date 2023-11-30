@@ -81,7 +81,7 @@ export default function Home(){
 		if (data.status === 'ok') {
 			const user = data.userdata;
 		
-			const formattedHiredDate = new Date(user.hiredDate).toLocaleDateString('en-US', {
+			const formattedHiredDate = new Date(user.employeeHireddate).toLocaleDateString('en-US', {
 			  year: 'numeric',
 			  month: 'long',
 			  day: 'numeric',
@@ -143,7 +143,7 @@ export default function Home(){
 						<div className='imageContainerSmall'>
 						<img
 							className='circleImageSmall'
-							src={userData.picture || 'profile-picture/default-profile-picture.png'}
+							src={userData.picture}
 							alt="Profile"
 						/>
 						</div>
@@ -170,7 +170,7 @@ export default function Home(){
 				<div className='employeeDetContainer' style={{width:'50em'}}>
                     <div className='imageContainer'>
 						<img className='circleImage'
-							src={userData.picture || 'profile-picture/default-profile-picture.png'}
+							src={userData.picture}
 							alt="Profile"
 						/>
                     </div>
@@ -227,7 +227,7 @@ export default function Home(){
 				<div className='employeeDetContainer'>
                     <div className='imageContainer'>
 						<img className='circleImage'
-							src={userData.picture || 'profile-picture/default-profile-picture.png'}
+							src={userData.picture}
 							alt="Profile"
 						/>
                     </div>
