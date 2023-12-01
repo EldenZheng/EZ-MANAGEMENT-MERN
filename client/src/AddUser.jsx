@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from "axios";
 import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -7,6 +7,8 @@ import { faEnvelope , faUser , faAddressCard , faBriefcase , faPhone , faLocatio
 export default function AddUser(){
     const [file, setFile] = useState(null);
     const [profilePicture, setProfilePicture] = useState(null);
+    const [emailExists, setEmailExists] = useState(false);
+    const [icExists, setICExists] = useState(false);
     const [userData,setUserData]=useState({
 		name: '',
 		email: '',
@@ -96,7 +98,36 @@ export default function AddUser(){
             return null;
         }
     };
-	
+	useEffect(() => {
+        // Function to check if email exists
+        const checkEmailAvailability = async () => {
+          try {
+            const response = await axios.get('http://localhost:3001/checkEmailUser/'+userData.email);
+            setEmailExists(response.data.emailExists);
+          } catch (error) {
+            console.error('Error checking email availability:', error);
+          }
+        };
+    
+        // Function to check if IC exists
+        const checkICAvailability = async () => {
+          try {
+            const response = await axios.get('http://localhost:3001/checkICUser/'+userData.ic);
+            setICExists(response.data.icExists);
+          } catch (error) {
+            console.error('Error checking IC availability:', error);
+          }
+        };
+    
+        // Perform email and IC checks when the user data changes
+        if (userData.email) {
+          checkEmailAvailability();
+        }
+    
+        if (userData.ic) {
+          checkICAvailability();
+        }
+      }, [userData.email, userData.ic]);
 
     return(
         <>
@@ -131,6 +162,11 @@ export default function AddUser(){
                                 onChange={handleChange}
                             />
                         </div>
+                        {emailExists ? (
+                            <span style={{ color: 'red' }}>Email is already in use. Please use a different email.</span>
+                        ) : (
+                            <span style={{ color: 'green' }}>Email is available.</span>
+                        )}
                         <div>
                             <FontAwesomeIcon icon={faKey} />
                             <label htmlFor="">Password</label><br/>
@@ -153,6 +189,11 @@ export default function AddUser(){
                                 onChange={handleChange}
                             />
                         </div>
+                        {icExists ? (
+                            <span style={{ color: 'red' }}>IC is already in use. Please use a different IC.</span>
+                        ) : (
+                            <span style={{ color: 'green' }}>IC is available.</span>
+                        )}
                         <div>
                             <FontAwesomeIcon icon={faBriefcase} />
                             <label htmlFor="dept">Department</label><br/>

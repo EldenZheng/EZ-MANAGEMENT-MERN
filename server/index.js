@@ -129,6 +129,18 @@ app.get('/fetchData', async (req, res) => {
 	}
 })
 
+app.get('/checkEmailUser/:email', async (req,res)=>{
+	const { email } = req.params;
+	const emailFound = await EmployeeModel.findOne({employeeEmail:email})
+	res.json({ emailExists: !!emailFound });
+})
+
+app.get('/checkICUser/:ic', async (req,res)=>{
+	const { ic } = req.params;
+	const ICFound = await EmployeeModel.findOne({employeeIC:ic})
+	res.json({ icExists: !!ICFound})
+})
+
 const upload = multer();
 
 app.post('/upload-profile-picture/:id', upload.single('profilePicture'), (req, res) => {
