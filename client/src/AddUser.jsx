@@ -26,6 +26,15 @@ export default function AddUser(){
 
     const AddUser = (e)=>{
         e.preventDefault();
+        if (emailExists) {
+            alert('Email is already in use. Please use a different email.');
+            return;
+        }
+    
+        if (icExists) {
+            alert('IC is already in use. Please use a different IC.');
+            return;
+        }
         axios.post("http://localhost:3001/createUser",userData)
         .then(result =>{
             handleUpload()
@@ -149,17 +158,19 @@ export default function AddUser(){
                                 name="name"
                                 value={userData.name}
                                 onChange={handleChange}
+                                required
                             />
                         </div>
                         <div>
                             <FontAwesomeIcon icon={faEnvelope} />
                             <label htmlFor="">Email</label><br/>
                             <input
-                                type="text"
+                                type="email"
                                 placeholder="Enter Email" 
                                 name="email"
                                 value={userData.email}
                                 onChange={handleChange}
+                                required
                             />
                         </div>
                         {emailExists ? (
@@ -176,6 +187,7 @@ export default function AddUser(){
                                 name="password"
                                 value={userData.password}
                                 onChange={handleChange}
+                                required
                             />
                         </div>
                         <div>
@@ -187,6 +199,7 @@ export default function AddUser(){
                                 name="ic"
                                 value={userData.ic}
                                 onChange={handleChange}
+                                required
                             />
                         </div>
                         {icExists ? (
@@ -198,45 +211,49 @@ export default function AddUser(){
                             <FontAwesomeIcon icon={faBriefcase} />
                             <label htmlFor="dept">Department</label><br/>
                             <select
-                            name="dept"
-                            value={userData.dept}
-                            onChange={handleChange}
-                            // disabled={userData.role === 'HR'} // Disable if "HR" is selected for "Role"
+                                name="dept"
+                                value={userData.dept}
+                                onChange={handleChange}
+                                required
+                                // disabled={userData.role === 'HR'} // Disable if "HR" is selected for "Role"
                             >
-                            <option value="">Select Department</option>
-                            <option value="IT">IT</option>
-                            <option value="HR">HR</option>
-                            <option value="Finance">Finance</option>
+                                <option value="">Select Department</option>
+                                <option value="HR">HR Department</option>
+                                <option value="IT Department">IT Department</option>
+                                <option value="Sales">Sales Department</option>
+                                <option value="Marketing">Marketing Department</option>
                             </select>
                         </div>
                         <div>
                             <FontAwesomeIcon icon={faBriefcase} />
                             <label htmlFor="role">Role</label><br/>
                             <select
-                            name="role"
-                            value={userData.role}
-                            onChange={handleChange}
-                            disabled={userData.dept === 'HR'} // Disable if "HR" is selected for "Department"
+                                name="role"
+                                value={userData.role}
+                                onChange={handleChange}
+                                disabled={userData.dept === 'HR'} // Disable if "HR" is selected for "Department"
+                                required
                             >
-                            <option value="">Select Role</option>
-                            <option value="Employee">Employee</option>
-                            <option value="Supervisor">Supervisor</option>
-                            <option value="HR">HR</option>
+                                <option value="">Select Role</option>
+                                <option value="Employee">Employee</option>
+                                <option value="Supervisor">Supervisor</option>
+                                <option value="HR">HR</option>
                             </select>
                         </div>
                         <div>
                             <FontAwesomeIcon icon={faUsers} />
                             <label htmlFor="team">Team</label><br/>
                             <select
-                            name="team"
-                            value={userData.team}
-                            onChange={handleChange}
-                            disabled={userData.role === 'HR' || userData.dept === 'HR'} // Disable if "HR" is selected for "Role" or "Department"
+                                name="team"
+                                value={userData.team}
+                                onChange={handleChange}
+                                disabled={userData.role === 'HR' || userData.dept === 'HR'} // Disable if "HR" is selected for "Role" or "Department"
+                                required
                             >
-                            <option value="">Select Team</option>
-                            <option value="1">Team 1</option>
-                            <option value="2">Team 2</option>
-                            <option value="3">Team 3</option>
+                                <option value="">Select Team</option>
+                                <option value="1">Team 1</option>
+                                <option value="2">Team 2</option>
+                                <option value="3">Team 3</option>
                             </select>
                         </div>
                         <div>
@@ -248,6 +265,7 @@ export default function AddUser(){
                                 name="phone"
                                 value={userData.phone}
                                 onChange={handleChange}
+                                required
                             />
                         </div>
                         <div>
@@ -259,6 +277,7 @@ export default function AddUser(){
                                 name="address"
                                 value={userData.address}
                                 onChange={handleChange}
+                                required
                             />
                         </div>
                         <button>Add User</button>
