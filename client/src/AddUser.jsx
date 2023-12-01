@@ -76,12 +76,12 @@ export default function AddUser(){
 
     const fetchDefaultProfilePicture = async () => {
         try {
-            const response = await fetch('./profile-picture/default-profile-picture.png'); // Replace with the actual path
+            const response = await fetch('./profile-picture/default-profile-picture.png');
             const blob = await response.blob();
             return new File([blob], 'default-profile-picture.png');
         } catch (error) {
             console.log(error);
-            return null; // Return null or handle the default image fetch failure in your specific way
+            return null;
         }
     };
 	
@@ -203,9 +203,6 @@ export default function AddUser(){
             </div>
             <input type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
             <br />
-            {/* <button onClick={handleUpload}>
-                <FontAwesomeIcon icon={faPenToSquare} />Change Profile Picture
-            </button> */}
         </>
     )
 }
