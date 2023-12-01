@@ -47,7 +47,6 @@ export default function AddUser(){
         setFile(selectedFile);
     
         if (selectedFile) {
-            // Use the selected file directly to create an object URL
             setProfilePicture(URL.createObjectURL(selectedFile));
         }
     };
@@ -143,25 +142,45 @@ export default function AddUser(){
                         </div>
                         <div>
                             <FontAwesomeIcon icon={faBriefcase} />
-                            <label htmlFor="">Deptartment</label><br/>
-                            <input
-                                type="text"
-                                placeholder="Enter Department" 
+                            <label htmlFor="dept">Department</label><br/>
+                            <select
                                 name="dept"
                                 value={userData.dept}
                                 onChange={handleChange}
-                            />
+                            >
+                                <option value="">Select Department</option>
+                                <option value="IT">IT</option>
+                                <option value="HR">HR</option>
+                                <option value="Finance">Finance</option>
+                            </select>
                         </div>
                         <div>
                             <FontAwesomeIcon icon={faBriefcase} />
-                            <label htmlFor="">Role</label><br/>
-                            <input
-                                type="text"
-                                placeholder="Enter Role" 
+                            <label htmlFor="role">Role</label><br/>
+                            <select
                                 name="role"
                                 value={userData.role}
                                 onChange={handleChange}
-                            />
+                            >
+                                <option value="">Select Role</option>
+                                <option value="Employee">Employee</option>
+                                <option value="Supervisor">Supervisor</option>
+                                <option value="HR">HR</option>
+                            </select>
+                        </div>
+                        <div>
+                            <FontAwesomeIcon icon={faUsers} />
+                            <label htmlFor="team">Team</label><br/>
+                            <select
+                                name="team"
+                                value={userData.team}
+                                onChange={handleChange}
+                            >
+                                <option value="">Select Team</option>
+                                <option value="1">Team 1</option>
+                                <option value="2">Team 2</option>
+                                <option value="3">Team 3</option>
+                            </select>
                         </div>
                         <div>
                             <FontAwesomeIcon icon={faPhone} />
@@ -182,17 +201,6 @@ export default function AddUser(){
                                 placeholder="Enter Address" 
                                 name="address"
                                 value={userData.address}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div>
-                            <FontAwesomeIcon icon={faUsers} />
-                            <label htmlFor="">Team</label><br/>
-                            <input
-                                type="text"
-                                placeholder="Enter Team" 
-                                name="team"
-                                value={userData.team}
                                 onChange={handleChange}
                             />
                         </div>
