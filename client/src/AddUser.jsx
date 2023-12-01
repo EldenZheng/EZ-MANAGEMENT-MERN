@@ -35,10 +35,23 @@ export default function AddUser(){
 
     const handleChange = (e) => {
         const {name,value}=e.target;
-        setUserData((prevData)=>({
+        // If "HR" is selected for "Role" or "Department," lock in "HR" for the other option
+        if ((name === 'role' || name === 'dept') && value === 'HR') {
+            setUserData((prevData) => ({
             ...prevData,
-            [name]:value,
-        }))
+            role: 'HR',
+            dept: 'HR',
+            team: '', // Reset team when "HR" is selected for "Role" or "Department"
+            }));
+        } else {
+            setUserData((prevData) => ({
+            ...prevData,
+            [name]: value,
+            // Reset the other option if "HR" is selected
+            ...(name === 'dept' && prevData.dept === 'HR' && value !== 'HR' ? { role: '', team: '' } : {}),
+            // You can add similar conditions for other options
+            }));
+        }
     }
 
     const handleFileChange = (e) => {
@@ -144,42 +157,45 @@ export default function AddUser(){
                             <FontAwesomeIcon icon={faBriefcase} />
                             <label htmlFor="dept">Department</label><br/>
                             <select
-                                name="dept"
-                                value={userData.dept}
-                                onChange={handleChange}
+                            name="dept"
+                            value={userData.dept}
+                            onChange={handleChange}
+                            // disabled={userData.role === 'HR'} // Disable if "HR" is selected for "Role"
                             >
-                                <option value="">Select Department</option>
-                                <option value="IT">IT</option>
-                                <option value="HR">HR</option>
-                                <option value="Finance">Finance</option>
+                            <option value="">Select Department</option>
+                            <option value="IT">IT</option>
+                            <option value="HR">HR</option>
+                            <option value="Finance">Finance</option>
                             </select>
                         </div>
                         <div>
                             <FontAwesomeIcon icon={faBriefcase} />
                             <label htmlFor="role">Role</label><br/>
                             <select
-                                name="role"
-                                value={userData.role}
-                                onChange={handleChange}
+                            name="role"
+                            value={userData.role}
+                            onChange={handleChange}
+                            disabled={userData.dept === 'HR'} // Disable if "HR" is selected for "Department"
                             >
-                                <option value="">Select Role</option>
-                                <option value="Employee">Employee</option>
-                                <option value="Supervisor">Supervisor</option>
-                                <option value="HR">HR</option>
+                            <option value="">Select Role</option>
+                            <option value="Employee">Employee</option>
+                            <option value="Supervisor">Supervisor</option>
+                            <option value="HR">HR</option>
                             </select>
                         </div>
                         <div>
                             <FontAwesomeIcon icon={faUsers} />
                             <label htmlFor="team">Team</label><br/>
                             <select
-                                name="team"
-                                value={userData.team}
-                                onChange={handleChange}
+                            name="team"
+                            value={userData.team}
+                            onChange={handleChange}
+                            disabled={userData.role === 'HR' || userData.dept === 'HR'} // Disable if "HR" is selected for "Role" or "Department"
                             >
-                                <option value="">Select Team</option>
-                                <option value="1">Team 1</option>
-                                <option value="2">Team 2</option>
-                                <option value="3">Team 3</option>
+                            <option value="">Select Team</option>
+                            <option value="1">Team 1</option>
+                            <option value="2">Team 2</option>
+                            <option value="3">Team 3</option>
                             </select>
                         </div>
                         <div>
